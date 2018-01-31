@@ -4,15 +4,15 @@ Create Rails Docker file with nginx and puma
 
 At first, create rails container and access it directly.
 	
-$ mkdir sample_rails_nginx && cd $_
+	$ mkdir sample_rails_nginx && cd $_
 
 Directory for create Dockerfile
 
-$ mkdir -p docker/app
+	$ mkdir -p docker/app
 
 Docker file for rails
 
-$ nano docker/app/Dockerfile
+	$ nano docker/app/Dockerfile
 
 		# Base ruby image:
 		FROM ruby:2.3.3
@@ -31,7 +31,7 @@ $ nano docker/app/Dockerfile
 
 Create docker-compose file
 
-$ vim docker-compose.yml
+$ nano docker-compose.yml
 	
 		version: '3'
 		services:
@@ -49,7 +49,7 @@ $ vim docker-compose.yml
 		    image: postgres
 
 
-$ bundle init
+	$ bundle init
 
 Add rails gem in Gemfile 
 
