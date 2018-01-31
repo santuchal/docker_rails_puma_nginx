@@ -52,40 +52,42 @@ $ vim docker-compose.yml
 $ bundle init
 
 Add rails gem in Gemfile 
-$ nano Gemfile
 
-gem "rails"
+	$ nano Gemfile
+
+	gem "rails"
 
 Add Gemfile.lock
-$touch Gemfile.lock
+
+	$touch Gemfile.lock
 
 Install gems and create rails project.
 
 You may be asked if you wanna overwrite gemfile, then press ‘Y’.
 
-$ docker-compose run app bundle exec rails new . -d postgresql
+	$ docker-compose run app bundle exec rails new . -d postgresql
 
 Set db host to postgres container.
 This is just sample, and define properly username and password.
-$ nano config/database.yml
+	$ nano config/database.yml
 
- default: &default
-   adapter: postgresql
-   encoding: unicode
-   host: db
-   username: postgres
-   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+	   default: &default
+	   adapter: postgresql
+	   encoding: unicode
+	   host: db
+	   username: postgres
+	   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 Note: Remember must remove/comment out username and password field in production section on database.yml
 
 Now build docker image and create database.
 
-$ docker-compose build
-$ docker-compose run app bundle exec rails db:create RAILS_ENV=production
+	$ docker-compose build
+	$ docker-compose run app bundle exec rails db:create RAILS_ENV=production
 
 Run application.
 
-$ docker-compose up
+	$ docker-compose up
 
 Check your browser with http://localhost:3000 
 
@@ -94,11 +96,11 @@ Open another command window/tab.
 Check all containers work well.
 	
 
-$ docker-compose ps
-     Name                   Command               State           Ports
---------------------------------------------------------------------------------
-samplerailsnginx_web_1   bundle exec puma -C config ...   Up      0.0.0.0:3000->3000/tcp
-samplerailsnginx_db_1    docker-entrypoint.sh postgres    Up      5432/tcp
+		$ docker-compose ps
+		     Name                   Command               State           Ports
+		--------------------------------------------------------------------------------
+		samplerailsnginx_web_1   bundle exec puma -C config ...   Up      0.0.0.0:3000->3000/tcp
+		samplerailsnginx_db_1    docker-entrypoint.sh postgres    Up      5432/tcp
 
 Then check localhost:3000 which is Rails default welcome page.
 
@@ -108,11 +110,11 @@ Now add Nginx’s container
 
 Create a directory which is related to nginx container.
 
-$ mkdir docker/web
+	$ mkdir docker/web
 
 Add nginx config file to proxy rails application.
 
-$ nano docker/web/app.conf
+	$ nano docker/web/app.conf
 
 		upstream puma_rails_app {
 		  server app:3000;
@@ -140,7 +142,7 @@ $ nano docker/web/app.conf
 
 Create docker file for nginx.
 
-$ vim docker/web/Dockerfile
+	$ nano docker/web/Dockerfile
 	
 		# Base nginx image:
 		FROM nginx
@@ -165,7 +167,7 @@ $ vim docker/web/Dockerfile
 
 Change docker-compose file to create nginx container.
 Now add the nginx in docker-compose file
-$ nano docker-compose.yml
+	$ nano docker-compose.yml
 
 
 		version: '3'
@@ -193,17 +195,17 @@ $ nano docker-compose.yml
 
 Build and run the docker image
 
-$ docker-compose build
-$ docker-compose up
+	$ docker-compose build
+	$ docker-compose up
 
 All containers work well.
 
-$ docker-compose ps
-     Name                   Command                     State          Ports
----------------------------------------------------------------------------------
-samplerailsnginx_app_1   bundle exec puma -C config ...   Up     	 3000/tcp
-samplerailsnginx_db_1    docker-entrypoint.sh postgres    Up      	 5432/tcp
-samplerailsnginx_web_1   nginx -g daemon off;             Up       	 0.0.0.0:8080->80/tcp
+		$ docker-compose ps
+		     Name                   Command                     State          Ports
+		---------------------------------------------------------------------------------
+		samplerailsnginx_app_1   bundle exec puma -C config ...   Up     	 3000/tcp
+		samplerailsnginx_db_1    docker-entrypoint.sh postgres    Up      	 5432/tcp
+		samplerailsnginx_web_1   nginx -g daemon off;             Up       	 0.0.0.0:8080->80/tcp
 
 Now check the localhost:8080, rails’s welcome page.
 
